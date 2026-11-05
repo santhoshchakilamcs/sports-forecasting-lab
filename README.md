@@ -4,7 +4,7 @@ NFL win-probability and point-spread models built on public play-by-play data, e
 out-of-sample on the 2024 season against the betting market's closing line.
 
 > **Scope and disclaimer.** This is a personal research project on public data. It is not job
-> experience, not affiliated with Susquehanna or any employer, and involves no real betting,
+> experience, and involves no real betting,
 > trading, or money. Against-the-spread numbers are a historical model-evaluation benchmark only,
 > not betting advice. Nothing here scrapes live odds.
 
