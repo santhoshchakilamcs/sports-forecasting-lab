@@ -143,13 +143,16 @@ streamlit_app.py    dashboard: weekly predictions, model vs line, calibration, s
 tests/              pipeline and database-free dashboard tests
 ```
 
-## Reproduce
+## Reproduce the research pipeline
 
-Requires Python 3.10–3.12. `nfl_data_py` needs NumPy < 2, so `pyarrow` is pinned to 18.1.0.
+Use Python 3.11 and `requirements-research.txt` to reproduce the verified results. This file
+preserves the original dependency pins unchanged, including the older pandas and NumPy versions
+required by `nfl_data_py`. Do not install the website requirements into this environment.
+The project metadata in `pyproject.toml` describes this research environment, not the website.
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-research.txt
 python -m sfl.data              # download real nflverse data -> data/sports.db
 python verify.py                # full pipeline + MLflow logging + verified metrics
 pytest -q                       # pipeline and dashboard checks
@@ -166,6 +169,24 @@ fetch data at startup, or train models when someone opens it. It is an interacti
 research dashboard, not a live score feed. The research pipeline and MLflow tracking still run
 locally through `verify.py`.
 
+The root `requirements.txt` is now **website-only**, resolved and pinned with `uv pip compile`
+for Python 3.14 using prebuilt wheels. It does not install `nfl_data_py`, XGBoost, scikit-learn,
+or MLflow. The website's newer pandas, NumPy, and PyArrow versions only render the committed
+results; they are not used to refit models or regenerate metrics. The website does not install
+the repository as a Python package.
+
+For a local website-only environment:
+
+```bash
+python3.14 -m venv .venv-web && source .venv-web/bin/activate
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
+Website tests live in `tests/test_dashboard.py` and run in a clean Python 3.14 environment in
+GitHub Actions. Tests that recompute research metrics live separately in `tests/test_snapshot.py`
+and run with the research requirements.
+
 To publish on [Streamlit Community Cloud](https://share.streamlit.io/), sign in with GitHub,
 choose **Create app**, and enter:
 
@@ -174,7 +195,7 @@ choose **Create app**, and enter:
 | Repository | `santhoshchakilamcs/sports-forecasting-lab` |
 | Branch | `main` |
 | Main file path | `streamlit_app.py` |
-| Python, under Advanced settings | `3.11` (the tested environment) |
+| Python, under Advanced settings | `3.14` (website environment) |
 | Secrets | None required |
 
 Choose an available app subdomain, then select **Deploy**. The app's actual public URL is
@@ -182,6 +203,12 @@ assigned by Streamlit; no live URL is claimed before that deployment succeeds. S
 to public so recruiters can view it without logging in. Streamlit account authorization must
 be completed by the account owner; never put tokens or credentials in the repository.
 
-After changes to the research pipeline, rerun `python verify.py`, run `pytest -q`, and commit
-the regenerated reports alongside the code. Streamlit redeploys from the selected branch.
+If a previous deployment failed building pandas on Python 3.14, keep the existing app and
+entrypoint: the updated root requirements remove that incompatible dependency set. Streamlit
+should rebuild after the GitHub update; use **Reboot app** if it has not retried. No Python-version
+change or app deletion is required for an existing Python 3.14 deployment.
+
+After changes to the research pipeline, use the **research environment** to rerun `python verify.py`
+and `pytest -q`, then commit the regenerated reports alongside the code. Streamlit redeploys from
+the selected branch.
 See the [official deployment guide](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy).
