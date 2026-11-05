@@ -2,6 +2,7 @@
 
 Every number quoted in README.md is copied from this script's output
 (also saved to reports/verify_output.txt and reports/metrics.json).
+The JSON includes test-game predictions for the database-free public dashboard.
 
 Usage:  python verify.py [--no-mlflow]
 """

@@ -6,3 +6,6 @@ mlflow.db
 mlruns/
 mlartifacts/
 data/*.db
+.env
+.env.*
+.streamlit/secrets.toml

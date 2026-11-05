@@ -145,3 +145,5 @@ team  wins_at_cutoff  exp_wins  p10_wins  p90_wins  p_10plus_wins  p_division  a
  NYG            2.00      4.87      3.00      7.00           0.00        0.00               3.00
   NE            2.00      4.59      3.00      6.00           0.00        0.00               4.00
  CLE            2.00      4.29      3.00      6.00           0.00        0.00               3.00
+
+[MLflow] parent run id: 1579f8c5dc0e4f588a6d58f602dee628
