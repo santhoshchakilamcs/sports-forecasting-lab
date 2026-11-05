@@ -1,0 +1,10 @@
+[project]
+name = "sports-forecasting-lab"
+version = "0.1.0"
+description = "NFL win-probability and spread modeling on public nflverse data"
+requires-python = ">=3.10,<3.13"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]
